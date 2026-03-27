@@ -1,5 +1,6 @@
 %md
 # Bronze Layer
+%md
 
 import inspect
 # Check what methods are available on DataFrameReader
