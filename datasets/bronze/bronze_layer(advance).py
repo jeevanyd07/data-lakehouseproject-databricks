@@ -1,0 +1,5 @@
+import inspect
+# Check what methods are available on DataFrameReader
+print("Available methods on DataFrameReader:")
+methods = [m for m in dir(spark.read) if not m.startswith('_')]
+print([m for m in methods if 'xl' in m.lower() or 'excel' in m.lower()])
