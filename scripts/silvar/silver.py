@@ -142,5 +142,34 @@ WHERE _c5 != 'Job_Card_Open_Date'
 
 df.write.mode("overwrite").saveAsTable("silver.dealer_workshop_performance")
 
-------------------------------------------------------------------------------------------------------
 
+------------------------------------------------------------------------------------------------------
+# Reading Table 3: workspace.bronze.stock_report
+------------------------------------------------------------------------------------------------------
+df = spark.table("workspace.bronze.stock_report")
+
+------------------------------------------------------------------------------------------------------
+## Silver Transformations & Loading 3: silver.stock_report   
+### No Transfermation Required Here
+-------------------------------------------------------------------------------------------------------
+df = spark.sql("""
+SELECT 
+_c0 AS Company_Name,
+_c1 AS Dealer_Code,
+_c2 AS Location_Name,
+_c3 AS Loc_Code,
+_c4 AS Item_Name,
+_c5 AS Item_Modl,
+_c6 AS Item_Desc,
+_c7 AS HSNSAC_Code,
+_c8 AS Igrp_Name,
+_c12 AS OpenQty,
+_c13 AS Open_Rate,
+_c15 AS Balance_Qty,
+_c17 AS CloseAmt,
+_c22 AS ITEM_RATE,
+_c24 AS State
+FROM workspace.bronze.stock_report
+WHERE _c0 != 'Company_Name'""")
+
+df.write.mode("overwrite").saveAsTable("silver.stock_report")
