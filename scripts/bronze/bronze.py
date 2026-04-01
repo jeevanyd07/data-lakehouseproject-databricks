@@ -28,3 +28,17 @@ df = (spark.read.option("header","true")
       .excel("/Volumes/workspace/bronze/source_system/ERP_FILES/Dealer_Workshop_Performance.xlsx"))
 df.display()
 
+### Writing 2.Dealer_Workshop_performance.xlsx
+df.write.mode("overwrite").saveAsTable("bronze.dealer_workshop_performance")
+
+--------------------------------------------------------------------------------------------------------
+
+### Reading 3.Stock_Report.xlsx
+df = (spark.read.option("header","true")
+      .option("inferSchema","true")
+      .excel("/Volumes/workspace/bronze/source_system/ERP_FILES/Stock_Report.xlsx"))
+df.display()
+
+df.write.mode("overwrite").saveAsTable("bronze.stock_report")
+
+---------------------------------------------------------------------------------------------------------
