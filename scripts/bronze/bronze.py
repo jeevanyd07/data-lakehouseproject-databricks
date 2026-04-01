@@ -1,2 +1,18 @@
+# Bronze Layer
 
-https://dbc-62f1d7fc-95c2.cloud.databricks.com/editor/notebooks/1688474943460424?o=7474653527230759#command/8904000028465850
+## Init
+import inspect
+# Check what methods are available on DataFrameReader
+print("Available methods on DataFrameReader:")
+methods = [m for m in dir(spark.read) if not m.startswith('_')]
+print([m for m in methods if 'xl' in m.lower() or 'excel' in m.lower()])
+
+
+## Reading ERP Files from Excle
+### Reading 1.Dealer_Invoice_Report.excle
+df = (spark.read
+      .option("header","true")
+      .option("inferSchema","true")
+      .excel("/Volumes/workspace/bronze/source_system/ERP_FILES/Dealer_Invoice_Report.xlsx"))
+df.display()
+
