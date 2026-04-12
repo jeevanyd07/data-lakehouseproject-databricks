@@ -1,18 +1,13 @@
-# Silver Layer
------------------------------------------------------------------------------------------------
-##  Reading Table 1: bronze.dealer_invoices
------------------------------------------------------------------------------------------------
-df = spark.table("workspace.bronze.dealer_invoices")
+# ================================================================
+# 📦 Silver Layer – Data Cleaning & Transformation (PySpark & SQL)
+# ================================================================
 
-----------------------------------------------------------------------------------------------
-## Silver Transformations & Loading 1 : silver.dealer_invoices 
-### 1. Convert the date format to SQL format for the columns **Date_Inv** and **Job Date**.
-### 2. If **Insurance Party** is NULL, show it as **"NA"**.
-### 3. Remove the unwanted columns.
-### 4.Add an additional column named Network_Type.
-### 5.Adjusting Data Type
--------------------------------------------------------------------------------------------------
-df = spark.sql("""
+
+# =========================================================
+# 🔹 1. Dealer Invoices
+# =========================================================
+
+dealer_invoices_df = spark.sql("""
 SELECT
     _c0 AS Dealer_Code,
 
@@ -20,7 +15,7 @@ SELECT
 
     _c1 AS Dealer_State,
 
-    -- ✅ Date conversion
+    -- ✅ Date_Inv
     CAST(
         COALESCE(
             try_to_date(_c2, 'M/d/yy'),
@@ -32,12 +27,13 @@ SELECT
 
     _c3 AS Bill_No,
     _c5 AS Party_Name,
-    
+
+    -- ✅ Network Type
     CASE 
       WHEN _c0 IN ('KA010001','TN310001','TS010011','TN310002','AP040001','AP020002') THEN 'FICOCO'
       ELSE 'FIFO'
     END AS Network_Type,
-    
+
     _c6 AS Job_Number,
 
     -- ✅ Job Date
@@ -49,15 +45,16 @@ SELECT
             try_to_date(_c7, 'dd/MM/yyyy')
         ) AS DATE
     ) AS Job_Date,
-    
+
     _c10 AS Service_Type,
     _c11 AS Job_Source,
-    
+
+    -- ✅ Insurance Party
     CASE 
       WHEN _c12 IS NULL THEN 'NA'
       ELSE _c12
     END AS Insurance_Party,
-    
+
     _c13 AS Model_Name,
     _c14 AS Brand_Classification,
     _c16 AS ODO_Reading,
@@ -69,7 +66,7 @@ SELECT
     _c23 AS Item_Type,
     _c24 AS Item_Group,
 
-    -- ✅ Numeric safe conversions (handles '1.2', '5.0', etc.)
+    -- ✅ Numeric conversions
     CAST(CAST(_c26 AS FLOAT) AS INT) AS Qty,
     CAST(_c27 AS FLOAT) AS Rate,
     CAST(_c28 AS FLOAT) AS Txbl_Total,
@@ -80,27 +77,17 @@ FROM workspace.bronze.dealer_invoices
 WHERE _c2 != 'Date_Inv'
 """)
 
-# ✅ Overwrite with schema update
-df.write \
-  .mode("overwrite") \
-  .option("overwriteSchema", "true") \
-  .saveAsTable("silver.dealer_invoices")
+dealer_invoices_df.write \
+    .mode("overwrite") \
+    .option("overwriteSchema", "true") \
+    .saveAsTable("silver.dealer_invoices")
 
-----------------------------------------------------------------------------------------------------------------
-## Reading Bronze Table 2 bronze.dealer_workshop_performance 
------------------------------------------------------------------------------------------------------------------
-df = spark.table("workspace.bronze.dealer_workshop_performance")
 
-----------------------------------------------------------------------------------------------------------------
-## Silver Transformations & Loading 2: silver.dealer_workshop_performance  
+# =========================================================
+# 🔹 2. Dealer Workshop Performance
+# =========================================================
 
-### 1. Convert the date format to SQL format for the columns **Date_Inv** and **Job Date**.
-### 2. If **Insurance Party** is NULL, show it as **"NA"**.
-### 3. Remove the unwanted columns.
-### 4.Add an additional column named Network_Type.
-### 5.Adjusting Data Type
------------------------------------------------------------------------------------------------------------------
-df = spark.sql("""
+dealer_workshop_df = spark.sql("""
 SELECT
     _c0 AS Fiscal_Year,
     _c1 AS Day,
@@ -108,10 +95,9 @@ SELECT
     _c3 AS Job_Card_Number,
     _c4 AS Invoice_Number,
 
-    -- ✅ Concatenated Key
     CONCAT(_c8, '_', _c15) AS Dealer_Location_Key,
 
-    -- ✅ Job_In_Date as DATE
+    -- ✅ Job_In_Date
     CAST(
         COALESCE(
             try_to_date(_c5, 'M/d/yy'),
@@ -121,7 +107,7 @@ SELECT
         ) AS DATE
     ) AS Job_In_Date,
 
-    -- ✅ Job_Out_Date as DATE
+    -- ✅ Job_Out_Date
     CAST(
         COALESCE(
             try_to_date(_c6, 'M/d/yy'),
@@ -154,16 +140,11 @@ SELECT
     _c26 AS Technician_Name,
     _c28 AS Service_Advisor_Name,
 
-    -- ✅ Revenue columns as FLOAT
     CAST(_c31 AS FLOAT) AS Labour_Revenue,
     CAST(_c32 AS FLOAT) AS Parts_Revenue,
     CAST(_c34 AS FLOAT) AS Oil_Revenue,
     CAST(_c36 AS FLOAT) AS Accessories_Revenue,
-
-    -- ✅ Discount as FLOAT
     CAST(_c40 AS FLOAT) AS Discount_Amount,
-
-    -- ✅ Total Revenue as INT (safe conversion)
     CAST(CAST(_c41 AS FLOAT) AS INT) AS Total_Job_Card_Revenue,
 
     CASE 
@@ -175,27 +156,21 @@ FROM workspace.bronze.dealer_workshop_performance
 WHERE _c5 != 'Job_Card_Open_Date'
 """)
 
-# ✅ Overwrite with schema update
-df.write \
-  .mode("overwrite") \
-  .option("overwriteSchema", "true") \
-  .saveAsTable("silver.dealer_workshop_performance")
+dealer_workshop_df.write \
+    .mode("overwrite") \
+    .option("overwriteSchema", "true") \
+    .saveAsTable("silver.dealer_workshop_performance")
 
-------------------------------------------------------------------------------------------------------
-# Reading Table 3: workspace.bronze.stock_report
-------------------------------------------------------------------------------------------------------
-df = spark.table("workspace.bronze.stock_report")
 
-------------------------------------------------------------------------------------------------------
-## Silver Transformations & Loading 3: silver.stock_report
-### 1.Adjusting Data Type
--------------------------------------------------------------------------------------------------------
-df = spark.sql("""
+# =========================================================
+# 🔹 3. Stock Report
+# =========================================================
+
+stock_report_df = spark.sql("""
 SELECT 
     _c0 AS Company_Name,
     _c1 AS Dealer_Code,
 
-    -- ✅ Concatenated Key
     CONCAT(_c1, '_', _c3) AS Dealer_Location_Key,
 
     _c2 AS Location_Name,
@@ -206,7 +181,6 @@ SELECT
     _c7 AS HSNSAC_Code,
     _c8 AS Igrp_Name,
 
-    -- ✅ Numeric conversions (safe for decimal strings)
     CAST(CAST(_c12 AS FLOAT) AS INT) AS OpenQty,
     CAST(_c13 AS FLOAT) AS Open_Rate,
     CAST(CAST(_c15 AS FLOAT) AS INT) AS Balance_Qty,
@@ -219,24 +193,24 @@ FROM workspace.bronze.stock_report
 WHERE _c0 != 'Company_Name'
 """)
 
-# ✅ Overwrite with schema update
-df.write \
-  .mode("overwrite") \
-  .option("overwriteSchema", "true") \
-  .saveAsTable("silver.stock_report")
+stock_report_df.write \
+    .mode("overwrite") \
+    .option("overwriteSchema", "true") \
+    .saveAsTable("silver.stock_report")
 
------------------------------------------------------------------------------------------------------
-## Silver Transformations & Loading 4: silver.wholesale_voc_bangalore
-### 1. Convert the date format of the **Bill_Date** column to SQL format.
-### 2. Concatenate Dealer Code and Location Code.
-### 3. Remove unwanted columns.
 
-df = spark.sql("""
+# =========================================================
+# 🔹 4. Wholesale VOC Bangalore
+# =========================================================
+
+wholesale_voc_df = spark.sql("""
 SELECT 
-concat(_c0,'_',_c4) AS Dealer_Location_Key,
-_c1 AS Dealer_Name, 
-_c3 AS Location_Name,
-  CAST(
+    CONCAT(_c0, '_', _c4) AS Dealer_Location_Key,
+    _c1 AS Dealer_Name, 
+    _c3 AS Location_Name,
+
+    -- ✅ Bill Date
+    CAST(
         COALESCE(
             try_to_date(_c5, 'M/d/yy'),
             try_to_date(_c5, 'd/M/yy'),
@@ -244,23 +218,29 @@ _c3 AS Location_Name,
             try_to_date(_c5, 'dd/MM/yyyy')
         ) AS DATE
     ) AS Bill_Date,
-_c6 AS Bill_No,
-_c8 AS Party_Name,
-_c9 AS Party_Code,
-_c10 AS Item,
-_c11 AS Item_Desc,
-_c12 AS Item_Type,
-_c13 AS Qty,
-_c14 AS Rate,
-_c22 AS Discount,
-_c23 AS Total
+
+    _c6 AS Bill_No,
+    _c8 AS Party_Name,
+    _c9 AS Party_Code,
+    _c10 AS Item,
+    _c11 AS Item_Desc,
+    _c12 AS Item_Type,
+    CAST(_c13 AS FLOAT) AS Qty,
+    CAST(_c14 AS FLOAT) AS Rate,
+    CAST(_c22 AS FLOAT) AS Discount,
+    CAST(_c23 AS FLOAT) AS Total
+
 FROM workspace.bronze.wholesale_voc_bangalore
 WHERE _c1 != 'Dealer_Name'
 """)
 
-# ✅ Overwrite with schema update
-df.write \
-  .mode("overwrite") \
-  .option("overwriteSchema", "true") \
-  .saveAsTable("silver.wholesale_voc_bangalore")
+wholesale_voc_df.write \
+    .mode("overwrite") \
+    .option("overwriteSchema", "true") \
+    .saveAsTable("silver.wholesale_voc_bangalore")
 
+
+# =========================================================
+# ✅ Completion Message
+# =========================================================
+print("✅ Silver Layer Transformation Completed Successfully!")
