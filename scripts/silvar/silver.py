@@ -225,3 +225,42 @@ df.write \
   .option("overwriteSchema", "true") \
   .saveAsTable("silver.stock_report")
 
+-----------------------------------------------------------------------------------------------------
+## Silver Transformations & Loading 4: silver.wholesale_voc_bangalore
+### 1. Convert the date format of the **Bill_Date** column to SQL format.
+### 2. Concatenate Dealer Code and Location Code.
+### 3. Remove unwanted columns.
+
+df = spark.sql("""
+SELECT 
+concat(_c0,'_',_c4) AS Dealer_Location_Key,
+_c1 AS Dealer_Name, 
+_c3 AS Location_Name,
+  CAST(
+        COALESCE(
+            try_to_date(_c5, 'M/d/yy'),
+            try_to_date(_c5, 'd/M/yy'),
+            try_to_date(_c5, 'dd-MM-yyyy'),
+            try_to_date(_c5, 'dd/MM/yyyy')
+        ) AS DATE
+    ) AS Bill_Date,
+_c6 AS Bill_No,
+_c8 AS Party_Name,
+_c9 AS Party_Code,
+_c10 AS Item,
+_c11 AS Item_Desc,
+_c12 AS Item_Type,
+_c13 AS Qty,
+_c14 AS Rate,
+_c22 AS Discount,
+_c23 AS Total
+FROM workspace.bronze.wholesale_voc_bangalore
+WHERE _c1 != 'Dealer_Name'
+""")
+
+# ✅ Overwrite with schema update
+df.write \
+  .mode("overwrite") \
+  .option("overwriteSchema", "true") \
+  .saveAsTable("silver.wholesale_voc_bangalore")
+
