@@ -1,5 +1,6 @@
 ## 📁 Repository Structure
 
+```text
 📦 project-root
 │
 ├── 📂 datasets
@@ -33,7 +34,7 @@
 │
 ├── LICENSE
 └── README.md
-
+```
 
 ---
 
