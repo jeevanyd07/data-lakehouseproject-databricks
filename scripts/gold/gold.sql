@@ -7,8 +7,7 @@
 -- 🔹 1. FACT TABLE: Sale vs Stock
 -- =========================================================
 
-CREATE OR REPLACE TABLE workspace.gold.sale_stock_table
-USING DELTA
+CREATE OR REPLACE VIEW workspace.gold.fact_sale_stock_view
 AS
 
 WITH Sale_Data AS (
@@ -97,8 +96,7 @@ ORDER BY sl.Avg_Sale_Per_Month;
 -- 🔹 2. DIM TABLE: Customer Data
 -- =========================================================
 
-CREATE OR REPLACE TABLE workspace.gold.customer_data_table
-USING DELTA
+CREATE OR REPLACE VIEW workspace.gold.dim_customer_data
 AS
 
 WITH Base AS (
