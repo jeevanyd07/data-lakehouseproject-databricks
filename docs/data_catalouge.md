@@ -17,8 +17,8 @@ Stock availability
 Required stock (reorder quantity)
 
 ### 🔹 Source Tables
-silver.dealer_invoices
-silver.stock_report
+1.silver.dealer_invoices
+2.silver.stock_report
 
 | Column Name         | Description                    |
 | ------------------- | ------------------------------ |
