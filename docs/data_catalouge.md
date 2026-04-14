@@ -38,3 +38,7 @@ Required stock (reorder quantity)
 | Required_qty        | Quantity to reorder            |
 | Total_Sale_Amt      | Total sales amount             |
 
+### 🔹 Business Use
+1.Inventory planning
+2.Stock replenishment
+3.Fast/slow moving items
