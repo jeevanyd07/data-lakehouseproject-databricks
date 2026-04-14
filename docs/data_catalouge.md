@@ -42,3 +42,52 @@ Required stock (reorder quantity)
 1.Inventory planning
 2.Stock replenishment
 3.Fast/slow moving items
+
+---
+
+## 📌 2. customer_data_table
+### 🔹 Description
+
+This table provides customer-level insights such as:
+
+Visit frequency
+Last visit date
+Customer activity status
+
+### 🔹 Source Table
+silver.dealer_workshop_performance
+
+| Column Name            | Description            |
+| ---------------------- | ---------------------- |
+| Fiscal_Year            | Financial year         |
+| Month                  | Month                  |
+| Dealer_Location_Key    | Dealer + Location key  |
+| Network_Type           | FICOCO / FIFO          |
+| Network_Name           | Dealer network name    |
+| Network_Location       | Location               |
+| Dealer_State           | State                  |
+| Service_Type           | Type of service        |
+| Job_In_Date            | Vehicle check-in date  |
+| Job_Out_Date           | Delivery date          |
+| Customer_Name          | Customer name          |
+| Phone_Number           | Customer phone number  |
+| Job_Card_Status        | Status of job          |
+| Job_Source             | Walk-in / etc          |
+| Registration_Number    | Vehicle number         |
+| ODO_Reading            | Vehicle reading        |
+| Model_Category         | Category               |
+| Brand_Name             | Brand                  |
+| Technician_Name        | Technician             |
+| Service_Advisor_Name   | Advisor                |
+| Total_Job_Card_Revenue | Revenue generated      |
+| Service_Days           | Days taken for service |
+| Last_Visit_Date        | Most recent visit      |
+| Visit_Count            | Total visits           |
+| Customer_Status        | Active / Lost          |
+| Load_Date              | Data load date         |
+
+
+### 🔹 Business Use
+Customer retention analysis
+Repeat customer tracking
+Service performance
