@@ -1,3 +1,4 @@
+```
     [ SOURCES ]                                      [ DATA WAREHOUSE ]                                     [ CONSUME ]
 
 
@@ -16,3 +17,4 @@
                                     │              │   │ • Enrichment │   │              │
                                     │              │   │ • Model: None│   │              │
                                     └──────────────┘   └──────────────┘   └──────────────┘
+```
