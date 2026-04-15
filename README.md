@@ -18,13 +18,31 @@ The data source for this architecture is ERP system files (XLSX format).
 ### 🥉 Bronze Layer (Raw Data Layer)
 he Bronze layer is responsible for ingesting raw data from the ERP system without any transformations.
 
--- Source: ERP (XLSX files)
--- Data Type: Raw data (as-is)
--- Object Type: Tables
--- Load Type: Batch Processing
--- Load Strategy: Full Load (Truncate & Insert)
--- Transformations: None
--- Data Model: None (Raw ingestion)
+- Source: ERP (XLSX files)
+- Data Type: Raw data (as-is)
+- Object Type: Tables
+- Load Type: Batch Processing
+- Load Strategy: Full Load (Truncate & Insert)
+- Transformations: None
+- Data Model: None (Raw ingestion)
+### 👉 Purpose:
+- Store original data for traceability
+- Act as a backup/reference layer
+
+### 🥈 Silver Layer (Cleaned & Standardized Layer)
+The Silver layer transforms raw data into clean, structured, and consistent datasets.
+
+- Input: Bronze Layer tables
+- Object Type: Tables
+- Load Type: Batch Processing
+- Load Strategy: Full Load (Truncate & Insert)
+- Transformations Applied:
+-                       Data Cleaning (handling nulls, duplicates)
+-                       Data Normalization
+-                       Data Standardization (formats, naming conventions)
+-                       Derived Columns (calculated fields)
+-                       Data Enrichment (adding business context)
+- Data Model: None (As-Is structured tables)
 
 
 ---
