@@ -1,4 +1,4 @@
-# Databricks Bootcamp 2026
+# Databricks Bootcamp
 
 Welcome to the **Databricks Data Lakehouse Project** by **Jeevan Y D**.
 
