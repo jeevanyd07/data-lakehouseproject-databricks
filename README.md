@@ -8,22 +8,24 @@ This repository contains a complete, real-world **Data Lakehouse implementation*
 
 ---
 
+# 📊 Data Architecture – Medallion Architecture
+### 🔹 Overview
+his project follows the Medallion Architecture pattern using three layers: Bronze, Silver, and Gold. The goal is to progressively refine raw data into business-ready insights.
 
-## 🏗️ Architecture
+The data source for this architecture is ERP system files (XLSX format).
 
-This project follows the **Medallion Architecture**:
+## 🔹 Architecture Layers
+### 🥉 Bronze Layer (Raw Data Layer)
+he Bronze layer is responsible for ingesting raw data from the ERP system without any transformations.
 
-### 🥉 Bronze Layer
-- Raw data ingestion  
-- Schema inference and storage as Delta tables  
+-- Source: ERP (XLSX files)
+-- Data Type: Raw data (as-is)
+-- Object Type: Tables
+-- Load Type: Batch Processing
+-- Load Strategy: Full Load (Truncate & Insert)
+-- Transformations: None
+-- Data Model: None (Raw ingestion)
 
-### 🥈 Silver Layer
-- Data cleaning and standardization  
-- Type casting and validation  
-
-### 🥇 Gold Layer
-- Dimensional Data Model (Business Transformation)
-- Ready for BI and analysis  
 
 ---
 
