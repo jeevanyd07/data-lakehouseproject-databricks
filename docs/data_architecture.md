@@ -1,3 +1,4 @@
+## 📊 Data Architecture
 ```
     [ SOURCES ]                                      [ DATA WAREHOUSE ]                                     [ CONSUME ]
 
