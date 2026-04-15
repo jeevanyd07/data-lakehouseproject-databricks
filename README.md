@@ -36,12 +36,11 @@ The Silver layer transforms raw data into clean, structured, and consistent data
 - Object Type: Tables
 - Load Type: Batch Processing
 - Load Strategy: Full Load (Truncate & Insert)
-- Transformations Applied:
--                       Data Cleaning (handling nulls, duplicates)
--                       Data Normalization
--                       Data Standardization (formats, naming conventions)
--                       Derived Columns (calculated fields)
--                       Data Enrichment (adding business context)
+- Transformations Applied: Data Cleaning (handling nulls, duplicates),
+Data Normalization,
+Data Standardization (formats, naming conventions),
+Derived Columns (calculated fields),
+Data Enrichment (adding business context).     
 - Data Model: None (As-Is structured tables)
 
 
