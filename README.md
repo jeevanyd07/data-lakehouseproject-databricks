@@ -43,6 +43,28 @@ Derived Columns (calculated fields),
 Data Enrichment (adding business context).     
 - Data Model: None (As-Is structured tables)
 
+### 👉 Purpose:
+- Improve data quality
+- Prepare data for business logic
+- Ensure consistency across datasets
+
+### 🥇 Gold Layer (Business-Ready Layer)
+The Gold layer contains curated, analytics-ready data for reporting and decision-making.
+- Input: Silver Layer tables
+- Data Type: Business-ready data
+- Object Type: Fact & Dimension Tables / Aggregated Tables
+- Load Type: Batch Processing
+- Transformations Applied:Business logic implementation,
+Aggregations (KPIs, metrics),
+Joins across multiple datasets,
+Data modeling (Star/Snowflake schema).
+- Data Model:Star Schema (Fact & Dimension tables),
+Optimized for reporting and analytics.
+
+### 👉 Purpose:
+- Enable dashboards and reports
+- Provide KPIs and insights
+- Support business decision-making
 
 ---
 
