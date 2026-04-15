@@ -1,15 +1,13 @@
     [ SOURCES ]                                      [ DATA WAREHOUSE ]                                     [ CONSUME ]
 
- ┌────────────┐
- │   CRM      │
- └────────────┘
 
- ┌────────────┐        ─────────▶  ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ─────────▶   ┌──────────────┐
+
+ ┌────────────┐                     ┌──────────────┐   ┌──────────────┐   ┌──────────────┐                ┌──────────────┐
  │   ERP      │                     │   BRONZE     │   │    SILVER    │   │     GOLD     │                │   Power BI   │
  │  (XLSX)    │                     │──────────────│   │──────────────│   │──────────────│                └──────────────┘
  └────────────┘                     │ • Raw Data   │   │ • Clean Data │   │ • Business   │                ┌──────────────┐
                                     │ • Table      │   │ • Table      │   │   Data       │                │ SQL Queries │
-                                    │ • Batch Load │   │ • Batch Load │   │ • KPIs       │                └──────────────┘
+                     ─────────▶    │ • Batch Load │   │ • Batch Load │   │ • KPIs       │    ─────────▶  └──────────────┘
                                     │ • Full Load  │   │ • Full Load  │   │ • Metrics    │                ┌──────────────┐
                                     │ • No Transf. │   │ • Cleaning   │   │ • Aggregates │                │ Machine Learn│
                                     │ • Model: None│   │ • Normalize  │   │ • Fact/Dim   │                └──────────────┘
