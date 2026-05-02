@@ -55,8 +55,10 @@ Stock_Data AS (
 )
 
 SELECT
-    st.Company_Name,
-    st.Location_Name,
+    LAST_VALUE(st.Company_Name, TRUE) 
+        OVER (PARTITION BY sl.Dealer_Location_Key ORDER BY sl.Item) AS Company_Name,
+    LAST_VALUE(st.Location_Name, TRUE) 
+        OVER (PARTITION BY sl.Dealer_Location_Key ORDER BY sl.Item) AS Location_Name,
     sl.Dealer_Location_Key,
     sl.Dealer_State,
     sl.Network_Type,
