@@ -111,7 +111,7 @@ ORDER BY Network_Name, Network_Location;
 
 
 -- =========================================================
--- 🔹 3. Retail vs Wholesale Report
+-- 🔹 3. Retail vs Wholesale Report - Dealer Wise
 -- =========================================================
 
 CREATE OR REPLACE TABLE workspace.reports.Wholesale_VS_Retail
@@ -119,67 +119,67 @@ USING DELTA
 AS
 
 WITH Whole_sale AS (
-    SELECT
-        Party_Name,
-        Party_Code,
-        Item_Type,
+SELECT
+    Party_Name,
+    Party_Code,
+    Item_Type,
 
-        ROUND(SUM(CASE WHEN MONTH(Bill_Date)=4 THEN Total ELSE 0 END)) AS Whole_Sale_April,
-        ROUND(SUM(CASE WHEN MONTH(Bill_Date)=5 THEN Total ELSE 0 END)) AS Whole_Sale_May,
-        ROUND(SUM(CASE WHEN MONTH(Bill_Date)=6 THEN Total ELSE 0 END)) AS Whole_Sale_June,
-        ROUND(SUM(CASE WHEN MONTH(Bill_Date) BETWEEN 4 AND 6 THEN Total ELSE 0 END)) AS Whole_Sale_Q1,
+    ROUND(SUM(CASE WHEN MONTH(Bill_Date)=4 THEN Total END)) AS Whole_Sale_April,
+    ROUND(SUM(CASE WHEN MONTH(Bill_Date)=5 THEN Total END)) AS Whole_Sale_May,
+    ROUND(SUM(CASE WHEN MONTH(Bill_Date)=6 THEN Total END)) AS Whole_Sale_June,
+    ROUND(SUM(CASE WHEN MONTH(Bill_Date) BETWEEN 4 AND 6 THEN Total END)) AS Whole_Sale_Q1,
 
-        ROUND(SUM(CASE WHEN MONTH(Bill_Date)=7 THEN Total ELSE 0 END)) AS Whole_Sale_July,
-        ROUND(SUM(CASE WHEN MONTH(Bill_Date)=8 THEN Total ELSE 0 END)) AS Whole_Sale_August,
-        ROUND(SUM(CASE WHEN MONTH(Bill_Date)=9 THEN Total ELSE 0 END)) AS Whole_Sale_September,
-        ROUND(SUM(CASE WHEN MONTH(Bill_Date) BETWEEN 7 AND 9 THEN Total ELSE 0 END)) AS Whole_Sale_Q2,
+    ROUND(SUM(CASE WHEN MONTH(Bill_Date)=7 THEN Total END)) AS Whole_Sale_July,
+    ROUND(SUM(CASE WHEN MONTH(Bill_Date)=8 THEN Total END)) AS Whole_Sale_August,
+    ROUND(SUM(CASE WHEN MONTH(Bill_Date)=9 THEN Total END)) AS Whole_Sale_September,
+    ROUND(SUM(CASE WHEN MONTH(Bill_Date) BETWEEN 7 AND 9 THEN Total END)) AS Whole_Sale_Q2,
 
-        ROUND(SUM(CASE WHEN MONTH(Bill_Date)=10 THEN Total ELSE 0 END)) AS Whole_Sale_October,
-        ROUND(SUM(CASE WHEN MONTH(Bill_Date)=11 THEN Total ELSE 0 END)) AS Whole_Sale_November,
-        ROUND(SUM(CASE WHEN MONTH(Bill_Date)=12 THEN Total ELSE 0 END)) AS Whole_Sale_December,
-        ROUND(SUM(CASE WHEN MONTH(Bill_Date) BETWEEN 10 AND 12 THEN Total ELSE 0 END)) AS Whole_Sale_Q3,
+    ROUND(SUM(CASE WHEN MONTH(Bill_Date)=10 THEN Total END)) AS Whole_Sale_October,
+    ROUND(SUM(CASE WHEN MONTH(Bill_Date)=11 THEN Total END)) AS Whole_Sale_November,
+    ROUND(SUM(CASE WHEN MONTH(Bill_Date)=12 THEN Total END)) AS Whole_Sale_December,
+    ROUND(SUM(CASE WHEN MONTH(Bill_Date) BETWEEN 10 AND 12 THEN Total END)) AS Whole_Sale_Q3,
 
-        ROUND(SUM(CASE WHEN MONTH(Bill_Date)=1 THEN Total ELSE 0 END)) AS Whole_Sale_January,
-        ROUND(SUM(CASE WHEN MONTH(Bill_Date)=2 THEN Total ELSE 0 END)) AS Whole_Sale_February,
-        ROUND(SUM(CASE WHEN MONTH(Bill_Date)=3 THEN Total ELSE 0 END)) AS Whole_Sale_March,
-        ROUND(SUM(CASE WHEN MONTH(Bill_Date) BETWEEN 1 AND 3 THEN Total ELSE 0 END)) AS Whole_Sale_Q4
+    ROUND(SUM(CASE WHEN MONTH(Bill_Date)=1 THEN Total END)) AS Whole_Sale_January,
+    ROUND(SUM(CASE WHEN MONTH(Bill_Date)=2 THEN Total END)) AS Whole_Sale_February,
+    ROUND(SUM(CASE WHEN MONTH(Bill_Date)=3 THEN Total END)) AS Whole_Sale_March,
+    ROUND(SUM(CASE WHEN MONTH(Bill_Date) BETWEEN 1 AND 3 THEN Total END)) AS Whole_Sale_Q4
 
-    FROM workspace.silver.wholesale_voc_bangalore
-    WHERE Bill_Date BETWEEN '2025-04-01' AND '2026-03-31'
-    AND Item_Type != 'Labour'
-    GROUP BY Party_Name, Party_Code, Item_Type
+FROM workspace.silver.wholesale_voc_bangalore
+WHERE Bill_Date BETWEEN '2026-04-01' AND '2027-03-31'
+AND Item_Type != 'Labour'
+GROUP BY Party_Name, Party_Code, Item_Type
 ),
 
 Retail AS (
-    SELECT 
-        Dealer_Code,
-        Network_Type,
-        Item_Type,
+SELECT 
+    Dealer_Code,
+    Network_Type,
+    Item_Type,
 
-        ROUND(SUM(CASE WHEN MONTH(Date_Inv)=4 THEN Total ELSE 0 END)) AS Retail_April,
-        ROUND(SUM(CASE WHEN MONTH(Date_Inv)=5 THEN Total ELSE 0 END)) AS Retail_May,
-        ROUND(SUM(CASE WHEN MONTH(Date_Inv)=6 THEN Total ELSE 0 END)) AS Retail_June,
-        ROUND(SUM(CASE WHEN MONTH(Date_Inv) BETWEEN 4 AND 6 THEN Total ELSE 0 END)) AS Retail_Q1,
+    ROUND(SUM(CASE WHEN MONTH(Date_Inv)=4 THEN Total END)) AS Retail_April,
+    ROUND(SUM(CASE WHEN MONTH(Date_Inv)=5 THEN Total END)) AS Retail_May,
+    ROUND(SUM(CASE WHEN MONTH(Date_Inv)=6 THEN Total END)) AS Retail_June,
+    ROUND(SUM(CASE WHEN MONTH(Date_Inv) BETWEEN 4 AND 6 THEN Total END)) AS Retail_Q1,
 
-        ROUND(SUM(CASE WHEN MONTH(Date_Inv)=7 THEN Total ELSE 0 END)) AS Retail_July,
-        ROUND(SUM(CASE WHEN MONTH(Date_Inv)=8 THEN Total ELSE 0 END)) AS Retail_August,
-        ROUND(SUM(CASE WHEN MONTH(Date_Inv)=9 THEN Total ELSE 0 END)) AS Retail_September,
-        ROUND(SUM(CASE WHEN MONTH(Date_Inv) BETWEEN 7 AND 9 THEN Total ELSE 0 END)) AS Retail_Q2,
+    ROUND(SUM(CASE WHEN MONTH(Date_Inv)=7 THEN Total END)) AS Retail_July,
+    ROUND(SUM(CASE WHEN MONTH(Date_Inv)=8 THEN Total END)) AS Retail_August,
+    ROUND(SUM(CASE WHEN MONTH(Date_Inv)=9 THEN Total END)) AS Retail_September,
+    ROUND(SUM(CASE WHEN MONTH(Date_Inv) BETWEEN 7 AND 9 THEN Total END)) AS Retail_Q2,
 
-        ROUND(SUM(CASE WHEN MONTH(Date_Inv)=10 THEN Total ELSE 0 END)) AS Retail_October,
-        ROUND(SUM(CASE WHEN MONTH(Date_Inv)=11 THEN Total ELSE 0 END)) AS Retail_November,
-        ROUND(SUM(CASE WHEN MONTH(Date_Inv)=12 THEN Total ELSE 0 END)) AS Retail_December,
-        ROUND(SUM(CASE WHEN MONTH(Date_Inv) BETWEEN 10 AND 12 THEN Total ELSE 0 END)) AS Retail_Q3,
+    ROUND(SUM(CASE WHEN MONTH(Date_Inv)=10 THEN Total END)) AS Retail_October,
+    ROUND(SUM(CASE WHEN MONTH(Date_Inv)=11 THEN Total END)) AS Retail_November,
+    ROUND(SUM(CASE WHEN MONTH(Date_Inv)=12 THEN Total END)) AS Retail_December,
+    ROUND(SUM(CASE WHEN MONTH(Date_Inv) BETWEEN 10 AND 12 THEN Total END)) AS Retail_Q3,
 
-        ROUND(SUM(CASE WHEN MONTH(Date_Inv)=1 THEN Total ELSE 0 END)) AS Retail_January,
-        ROUND(SUM(CASE WHEN MONTH(Date_Inv)=2 THEN Total ELSE 0 END)) AS Retail_February,
-        ROUND(SUM(CASE WHEN MONTH(Date_Inv)=3 THEN Total ELSE 0 END)) AS Retail_March,
-        ROUND(SUM(CASE WHEN MONTH(Date_Inv) BETWEEN 1 AND 3 THEN Total ELSE 0 END)) AS Retail_Q4
+    ROUND(SUM(CASE WHEN MONTH(Date_Inv)=1 THEN Total END)) AS Retail_January,
+    ROUND(SUM(CASE WHEN MONTH(Date_Inv)=2 THEN Total END)) AS Retail_February,
+    ROUND(SUM(CASE WHEN MONTH(Date_Inv)=3 THEN Total END)) AS Retail_March,
+    ROUND(SUM(CASE WHEN MONTH(Date_Inv) BETWEEN 1 AND 3 THEN Total END)) AS Retail_Q4
 
-    FROM workspace.silver.dealer_invoices
-    WHERE Item_Type != 'Labour'
-    AND Date_Inv BETWEEN '2025-04-01' AND '2026-03-31'
-    GROUP BY Dealer_Code, Network_Type, Item_Type
+FROM workspace.silver.dealer_invoices
+WHERE Item_Type != 'Labour'
+AND Date_Inv BETWEEN '2026-04-01' AND '2027-03-31'
+GROUP BY Dealer_Code, Network_Type, Item_Type
 )
 
 SELECT 
@@ -193,26 +193,45 @@ SELECT
     r.Network_Type,
     COALESCE(w.Item_Type, r.Item_Type) AS Item_Type,
 
-    -- Q1–Q4 (NULL safe)
-    COALESCE(w.Whole_Sale_April,0), COALESCE(r.Retail_April,0),
-    COALESCE(w.Whole_Sale_May,0), COALESCE(r.Retail_May,0),
-    COALESCE(w.Whole_Sale_June,0), COALESCE(r.Retail_June,0),
-    COALESCE(w.Whole_Sale_Q1,0), COALESCE(r.Retail_Q1,0),
+    -- Q1
+    COALESCE(w.Whole_Sale_April,0) AS Whole_Sale_April,
+    COALESCE(r.Retail_April,0) AS Retail_April,
+    COALESCE(w.Whole_Sale_May,0) AS Whole_Sale_May,
+    COALESCE(r.Retail_May,0) AS Retail_May,
+    COALESCE(w.Whole_Sale_June,0) AS Whole_Sale_June,
+    COALESCE(r.Retail_June,0) AS Retail_June,
+    COALESCE(w.Whole_Sale_Q1,0) AS Whole_Sale_Q1,
+    COALESCE(r.Retail_Q1,0) AS Retail_Q1,
 
-    COALESCE(w.Whole_Sale_July,0), COALESCE(r.Retail_July,0),
-    COALESCE(w.Whole_Sale_August,0), COALESCE(r.Retail_August,0),
-    COALESCE(w.Whole_Sale_September,0), COALESCE(r.Retail_September,0),
-    COALESCE(w.Whole_Sale_Q2,0), COALESCE(r.Retail_Q2,0),
+    -- Q2
+    COALESCE(w.Whole_Sale_July,0) AS Whole_Sale_July,
+    COALESCE(r.Retail_July,0) AS Retail_July,
+    COALESCE(w.Whole_Sale_August,0) AS Whole_Sale_August,
+    COALESCE(r.Retail_August,0) AS Retail_August,
+    COALESCE(w.Whole_Sale_September,0) AS Whole_Sale_September,
+    COALESCE(r.Retail_September,0) AS Retail_September,
+    COALESCE(w.Whole_Sale_Q2,0) AS Whole_Sale_Q2,
+    COALESCE(r.Retail_Q2,0) AS Retail_Q2,
 
-    COALESCE(w.Whole_Sale_October,0), COALESCE(r.Retail_October,0),
-    COALESCE(w.Whole_Sale_November,0), COALESCE(r.Retail_November,0),
-    COALESCE(w.Whole_Sale_December,0), COALESCE(r.Retail_December,0),
-    COALESCE(w.Whole_Sale_Q3,0), COALESCE(r.Retail_Q3,0),
+    -- Q3
+    COALESCE(w.Whole_Sale_October,0) AS Whole_Sale_October,
+    COALESCE(r.Retail_October,0) AS Retail_October,
+    COALESCE(w.Whole_Sale_November,0) AS Whole_Sale_November,
+    COALESCE(r.Retail_November,0) AS Retail_November,
+    COALESCE(w.Whole_Sale_December,0) AS Whole_Sale_December,
+    COALESCE(r.Retail_December,0) AS Retail_December,
+    COALESCE(w.Whole_Sale_Q3,0) AS Whole_Sale_Q3,
+    COALESCE(r.Retail_Q3,0) AS Retail_Q3,
 
-    COALESCE(w.Whole_Sale_January,0), COALESCE(r.Retail_January,0),
-    COALESCE(w.Whole_Sale_February,0), COALESCE(r.Retail_February,0),
-    COALESCE(w.Whole_Sale_March,0), COALESCE(r.Retail_March,0),
-    COALESCE(w.Whole_Sale_Q4,0), COALESCE(r.Retail_Q4,0)
+    -- Q4
+    COALESCE(w.Whole_Sale_January,0) AS Whole_Sale_January,
+    COALESCE(r.Retail_January,0) AS Retail_January,
+    COALESCE(w.Whole_Sale_February,0) AS Whole_Sale_February,
+    COALESCE(r.Retail_February,0) AS Retail_February,
+    COALESCE(w.Whole_Sale_March,0) AS Whole_Sale_March,
+    COALESCE(r.Retail_March,0) AS Retail_March,
+    COALESCE(w.Whole_Sale_Q4,0) AS Whole_Sale_Q4,
+    COALESCE(r.Retail_Q4,0) AS Retail_Q4
 
 FROM Retail r
 LEFT JOIN Whole_sale w 
