@@ -203,14 +203,12 @@ stock_report_df.write \
 # 🔹 4. Wholesale VOC Bangalore
 # =========================================================
 
-wholesale_voc_df = spark.sql("""
+df = spark.sql("""
 SELECT 
-    CONCAT(_c0, '_', _c4) AS Dealer_Location_Key,
-    _c1 AS Dealer_Name, 
-    _c3 AS Location_Name,
-
-    -- ✅ Bill Date
-    CAST(
+concat(_c0,'_',_c4) AS Dealer_Location_Key,
+_c1 AS Dealer_Name, 
+_c3 AS Location_Name,
+  CAST(
         COALESCE(
             try_to_date(_c5, 'M/d/yy'),
             try_to_date(_c5, 'd/M/yy'),
@@ -218,27 +216,29 @@ SELECT
             try_to_date(_c5, 'dd/MM/yyyy')
         ) AS DATE
     ) AS Bill_Date,
-
-    _c6 AS Bill_No,
-    _c8 AS Party_Name,
-    _c9 AS Party_Code,
-    _c10 AS Item,
-    _c11 AS Item_Desc,
-    _c12 AS Item_Type,
-    CAST(_c13 AS FLOAT) AS Qty,
-    CAST(_c14 AS FLOAT) AS Rate,
-    CAST(_c22 AS FLOAT) AS Discount,
-    CAST(_c23 AS FLOAT) AS Total
-
+_c6 AS Bill_No,
+_c8 AS Party_Name,
+CASE
+    WHEN _c8 IN ('AVADI VOC','GUNTUR VOC','Vijayawada VOC','AYAPAKKAM VOC','KAMINENI VOC') THEN 'FICOCO'
+    ELSE 'FOFO'
+END AS Network_Type,
+_c9 AS Party_Code,
+_c10 AS Item,
+_c11 AS Item_Desc,
+_c12 AS Item_Type,
+_c13 AS Qty,
+_c14 AS Rate,
+_c22 AS Discount,
+_c23 AS Total
 FROM workspace.bronze.wholesale_voc_bangalore
 WHERE _c1 != 'Dealer_Name'
 """)
 
-wholesale_voc_df.write \
-    .mode("overwrite") \
-    .option("overwriteSchema", "true") \
-    .saveAsTable("silver.wholesale_voc_bangalore")
-
+# ✅ Overwrite with schema update
+df.write \
+  .mode("overwrite") \
+  .option("overwriteSchema", "true") \
+  .saveAsTable("silver.wholesale_voc_bangalore")
 
 # =========================================================
 # ✅ Completion Message
