@@ -31,7 +31,7 @@ SELECT
     -- ✅ Network Type
     CASE 
       WHEN _c0 IN ('KA010001','TN310001','TS010011','TN310002','AP040001','AP020002') THEN 'FICOCO'
-      ELSE 'FIFO'
+      ELSE 'FOFO'
     END AS Network_Type,
 
     _c6 AS Job_Number,
@@ -119,7 +119,7 @@ SELECT
 
     CASE 
       WHEN _c8 IN ('KA010001','TN310001','TS010011','TN310002','AP040001','AP020002') THEN 'FICOCO'
-      ELSE 'FIFO'
+      ELSE 'FOFO'
     END AS Network_Type,
 
     _c8 AS Network_Code,
